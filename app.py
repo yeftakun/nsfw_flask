@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 # Load the processor and model outside of the route to avoid reloading it with each request
 processor = ViTImageProcessor.from_pretrained('yeftakun/vit-base-nsfw-detector')
-model = AutoModelForImageClassification.from_pretrained('AdamCodd/vit-base-nsfw-detector')
+model = AutoModelForImageClassification.from_pretrained('yeftakun/vit-base-nsfw-detector')
 
 @app.route('/classify', methods=['POST'])
 def classify_image():

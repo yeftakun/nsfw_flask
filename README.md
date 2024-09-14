@@ -1,0 +1,1 @@
+Loaded model: [yeftakun/vit-base-nsfw-detector](https://huggingface.co/yeftakun/vit-base-nsfw-detector)
