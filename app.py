@@ -7,8 +7,12 @@ import requests
 app = Flask(__name__)
 
 # Load the processor and model outside of the route to avoid reloading it with each request
-processor = ViTImageProcessor.from_pretrained('yeftakun/vit-base-nsfw-detector')
-model = AutoModelForImageClassification.from_pretrained('yeftakun/vit-base-nsfw-detector')
+# processor = ViTImageProcessor.from_pretrained('yeftakun/vit-base-nsfw-detector')
+# model = AutoModelForImageClassification.from_pretrained('yeftakun/vit-base-nsfw-detector')
+
+# Tentukan direktori lokal tempat model disimpan
+processor = ViTImageProcessor.from_pretrained('../')
+model = AutoModelForImageClassification.from_pretrained('../')
 
 @app.route('/classify', methods=['POST'])
 def classify_image():
@@ -22,6 +26,10 @@ def classify_image():
 
         # Fetch the image from the URL
         image = Image.open(requests.get(image_url, stream=True).raw)
+
+        # Convert the image to RGB mode if it's not already in RGB
+        if image.mode != 'RGB':
+            image = image.convert('RGB')
 
         # Preprocess the image
         inputs = processor(images=image, return_tensors="pt")
