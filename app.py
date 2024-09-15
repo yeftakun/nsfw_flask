@@ -1,16 +1,23 @@
+import logging
 from flask import Flask, request, jsonify
 from transformers import ViTImageProcessor, AutoModelForImageClassification
 from PIL import Image
 import requests
+from datetime import datetime
+import socket
 
 # Initialize the Flask app
 app = Flask(__name__)
 
+# Configure logging
+logging.basicConfig(filename='api_requests.log', 
+                    level=logging.INFO,
+                    format='%(asctime)s %(levelname)s: %(message)s')
+
 # Load the processor and model outside of the route to avoid reloading it with each request
+
 # processor = ViTImageProcessor.from_pretrained('yeftakun/vit-base-nsfw-detector')
 # model = AutoModelForImageClassification.from_pretrained('yeftakun/vit-base-nsfw-detector')
-
-# Tentukan direktori lokal tempat model disimpan
 processor = ViTImageProcessor.from_pretrained('../')
 model = AutoModelForImageClassification.from_pretrained('../')
 
@@ -22,7 +29,9 @@ def classify_image():
         image_url = data.get('image_url')
         
         if not image_url:
-            return jsonify({"error": "Image URL not provided"}), 400
+            error_msg = "Image URL not provided"
+            logging.error(f"{error_msg} | IP: {request.remote_addr}")
+            return jsonify({"error": error_msg}), 400
 
         # Fetch the image from the URL
         image = Image.open(requests.get(image_url, stream=True).raw)
@@ -42,6 +51,9 @@ def classify_image():
         predicted_class_idx = logits.argmax(-1).item()
         predicted_class = model.config.id2label[predicted_class_idx]
 
+        # Log the successful request
+        logging.info(f"Classified image | IP: {request.remote_addr} | URL: {image_url} | Class: {predicted_class}")
+
         # Return the classification result
         return jsonify({
             "image_url": image_url,
@@ -49,7 +61,9 @@ def classify_image():
         })
     
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        error_msg = str(e)
+        logging.error(f"Error processing request: {error_msg} | IP: {request.remote_addr}")
+        return jsonify({"error": error_msg}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
