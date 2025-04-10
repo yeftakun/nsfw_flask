@@ -11,8 +11,8 @@ processor = ViTImageProcessor.from_pretrained('yeftakun/vit-base-nsfw-detector')
 model = AutoModelForImageClassification.from_pretrained('yeftakun/vit-base-nsfw-detector')
 
 # Local
-processor = ViTImageProcessor.from_pretrained('../')
-model = AutoModelForImageClassification.from_pretrained('../')
+processor = ViTImageProcessor.from_pretrained('./')
+model = AutoModelForImageClassification.from_pretrained('./')
 ```
 
 Then run `app.py`
