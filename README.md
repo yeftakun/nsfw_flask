@@ -5,4 +5,14 @@ Or using model on local by manualy download at [here](https://huggingface.co/yef
 - preprocessor_config.json
 - model.safetensors
 
+```
+# Direct
+processor = ViTImageProcessor.from_pretrained('yeftakun/vit-base-nsfw-detector')
+model = AutoModelForImageClassification.from_pretrained('yeftakun/vit-base-nsfw-detector')
+
+# Local
+processor = ViTImageProcessor.from_pretrained('../')
+model = AutoModelForImageClassification.from_pretrained('../')
+```
+
 Then run `app.py`
