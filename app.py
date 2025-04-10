@@ -18,8 +18,8 @@ logging.basicConfig(filename='api_requests.log',
 
 # processor = ViTImageProcessor.from_pretrained('yeftakun/vit-base-nsfw-detector')
 # model = AutoModelForImageClassification.from_pretrained('yeftakun/vit-base-nsfw-detector')
-processor = ViTImageProcessor.from_pretrained('../')
-model = AutoModelForImageClassification.from_pretrained('../')
+processor = ViTImageProcessor.from_pretrained('./')
+model = AutoModelForImageClassification.from_pretrained('./')
 
 @app.route('/classify', methods=['POST'])
 def classify_image():
